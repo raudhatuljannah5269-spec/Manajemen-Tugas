@@ -9,28 +9,32 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    
+    <body class="bg-blue-100 font-[Poppins] min-h-screen">
+<nav class="bg-blue-300 p-4 shadow-md flex justify-between items-center">
+    <h1 class="text-white font-bold text-lg"> 📜Sistem Manajemen Tugas REG 📅</h1>
+    <div>
+        @auth
+            <a href="{{ route('tasks.index') }}" class="text-white font-bold px-3">Task</a>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button class="text-white px-3 font-bold">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="text-white px-3">Login</a>
+        @endauth
+    </div>
+</nav>
+<main class="py-8">
+    @yield('content')
+</main>
+</body>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
 </html>

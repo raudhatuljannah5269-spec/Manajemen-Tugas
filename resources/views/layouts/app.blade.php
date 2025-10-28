@@ -22,7 +22,7 @@
     <h1 class="text-white font-bold text-lg"> 📜Sistem Manajemen Tugas REG 📅</h1>
     <div>
         @auth
-            <a href="{{ route('tasks.index') }}" class="text-white font-bold px-3">Task</a>
+            
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
                 <button class="text-white px-3 font-bold">Logout</button>

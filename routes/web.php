@@ -25,3 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+// API sederhana untuk mendapatkan daftar tugas (JSON)
+Route::middleware('auth')->get('/api/tasks', [App\Http\Controllers\TaskController::class, 'apiIndex']);
+

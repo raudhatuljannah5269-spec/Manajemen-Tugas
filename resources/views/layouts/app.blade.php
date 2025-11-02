@@ -18,6 +18,7 @@
 </head>
 
 <body class="bg-blue-100 font-[Poppins] min-h-screen">
+    <!-- Navbar -->
     <nav class="bg-blue-300 p-4 shadow-md flex justify-between items-center">
         <h1 class="text-white font-bold text-lg">
             📜 Sistem Manajemen Tugas REG 📅
@@ -30,13 +31,15 @@
                     @if(Auth::user()->profile_photo)
                         <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" 
                              alt="Foto Profil"
-                             class="w-8 h-8 rounded-full border-2 border-white">
+                             class="w-8 h-8 rounded-full border-2 border-white object-cover">
                     @else
                         <div class="w-8 h-8 rounded-full bg-white text-blue-500 flex items-center justify-center font-bold">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         </div>
                     @endif
-                    <span class="text-white font-semibold">{{ Auth::user()->name }}</span>
+                    <span class="text-white font-semibold truncate max-w-[120px]">
+                        {{ Auth::user()->name }}
+                    </span>
                 </a>
 
                 <!-- Tombol Logout -->
@@ -50,8 +53,20 @@
         </div>
     </nav>
 
-    <main class="py-8">
-        @yield('content')
+    <!-- Header -->
+    @if (isset($header))
+        <header class="bg-white shadow mt-4 mx-auto max-w-5xl rounded-xl">
+            <div class="py-6 px-6 text-center">
+                {{ $header }}
+            </div>
+        </header>
+    @endif
+
+    <!-- Main content -->
+    <main class="py-10 px-6 flex justify-center">
+        <div class="w-full max-w-5xl">
+            {{ $slot }}
+        </div>
     </main>
 </body>
 </html>

@@ -66,4 +66,16 @@ class TaskController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Tugas dihapus.');
     }
+
+    public function apiIndex()
+{
+    $tasks = \App\Models\Task::where('user_id', \Illuminate\Support\Facades\Auth::id())->get();
+    return response()->json([
+        'success' => true,
+        'user' => \Illuminate\Support\Facades\Auth::user()->name,
+        'total_tasks' => $tasks->count(),
+        'tasks' => $tasks
+    ]);
+}
+
 }

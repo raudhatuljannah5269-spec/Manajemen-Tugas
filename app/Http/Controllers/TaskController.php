@@ -32,20 +32,20 @@ class TaskController extends Controller
 
     // Simpan tugas baru
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'nullable',
-        'deadline' => 'nullable|date',
-    ]);
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'nullable',
+            'deadline' => 'nullable|date',
+        ]);
 
-    $validated['user_id'] = Auth::id();
-    $validated['status'] = false; // false = belum selesai
+        $validated['user_id'] = Auth::id();
+        $validated['status'] = false; // false = belum selesai
 
-    Task::create($validated);
+        Task::create($validated);
 
-    return redirect()->route('dashboard')->with('success', 'Tugas berhasil ditambahkan!');
-}
+        return redirect()->route('dashboard')->with('success', 'Tugas berhasil ditambahkan!');
+    }
 
     // Ubah status tugas (toggle selesai/belum)
     public function toggle(Task $task)
@@ -57,25 +57,46 @@ class TaskController extends Controller
         return redirect()->route('dashboard');
     }
 
+    // Update status task via AJAX
+    public function updateStatus(Request $request, Task $task)
+    {
+        if ($task->user_id === Auth::id()) {
+            $task->status = $request->status;
+            $task->save();
+            return response()->json(['success' => true, 'status' => $task->status]);
+        }
+
+        return response()->json(['success' => false], 403);
+    }
+
     // Hapus tugas
     public function destroy(Task $task)
     {
         if ($task->user_id === Auth::id()) {
             $task->delete();
+            return redirect()->route('dashboard')->with('success', 'Tugas dihapus.');
         }
 
-        return redirect()->route('dashboard')->with('success', 'Tugas dihapus.');
+        return redirect()->route('dashboard')->with('error', 'Tidak bisa menghapus tugas.');
     }
 
+    // API endpoint untuk daftar task (JSON)
     public function apiIndex()
+    {
+        $tasks = Task::where('user_id', Auth::id())->get();
+
+        return response()->json([
+            'success' => true,
+            'user' => Auth::user()->name,
+            'total_tasks' => $tasks->count(),
+            'tasks' => $tasks
+        ]);
+    }
+
+    public function index()
 {
-    $tasks = \App\Models\Task::where('user_id', \Illuminate\Support\Facades\Auth::id())->get();
-    return response()->json([
-        'success' => true,
-        'user' => \Illuminate\Support\Facades\Auth::user()->name,
-        'total_tasks' => $tasks->count(),
-        'tasks' => $tasks
-    ]);
+    $tasks = Task::where('user_id', Auth::id())->get();
+    return view('tasks.index', compact('tasks'));
 }
 
 }

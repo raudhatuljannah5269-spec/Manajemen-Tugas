@@ -60,6 +60,11 @@
                                             Hapus
                                         </button>
                                     </form>
+                                    <a href="{{ route('tasks.show', $task->id) }}" 
+   class="bg-blue-400 hover:bg-blue-500 text-blue-600 px-3 py-1 rounded-lg text-sm shadow">
+   Detail
+</a>
+
                                 </div>
                             </div>
                         @endforeach
@@ -102,6 +107,11 @@
                                             Hapus
                                         </button>
                                     </form>
+                                    <a href="{{ route('tasks.show', $task->id) }}" 
+   class="bg-blue-400 hover:bg-blue-500 text-blue-600 px-3 py-1 rounded-lg text-sm shadow">
+   Detail
+</a>
+
                                 </div>
                             </div>
                         @endforeach
